@@ -1,1 +1,16 @@
-echo "My codebuild"
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.10
+
+  build:
+    commands:
+      - echo "Zipping lambda function..."
+      - zip lambda_function.zip lambda_function.py
+
+  post_build:
+    commands:
+      - echo "Uploading ZIP to S3..."
+      - aws s3 cp lambda_function.zip s3://manish-lambda-code-bucket-123/lambda/lambda_function.zip
