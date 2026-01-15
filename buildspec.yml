@@ -7,13 +7,14 @@ phases:
 
   build:
     commands:
-      - echo "Zipping lambda function..."
-      - zip lambda_function.zip lambda_function.py
+      - echo "Zipping lambda function with build number..."
+      - ZIP_NAME=lambda_function_${CODEBUILD_BUILD_NUMBER}.zip
+      - zip $ZIP_NAME lambda_function.py
 
   post_build:
     commands:
-      - echo "Uploading ZIP to S3..."
-      - aws s3 cp lambda_function.zip s3://cicd-demo-lambda-code-bucket-123/lambda/lambda_function.zip
-      - echo "Updating Lambda function..."
-      - aws lambda update-function-code --function-name cicd-demo-lambda --s3-bucket cicd-demo-lambda-code-bucket-123 --s3-key lambda/lambda_function.zip
+      - echo "Uploading versioned ZIP to S3..."
+      - aws s3 cp $ZIP_NAME s3://cicd-demo-lambda-code-bucket-123/lambda/$ZIP_NAME
 
+      - echo "Updating Lambda function and publishing version..."
+      - aws lambda update-function-code --function-name cicd-demo-lambda --s3-bucket cicd-demo-lambda-code-bucket-123 --s3-key lambda/$ZIP_NAME --publish
