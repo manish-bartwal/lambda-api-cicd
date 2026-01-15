@@ -14,8 +14,6 @@ phases:
     commands:
       - echo "Uploading ZIP to S3..."
       - aws s3 cp lambda_function.zip s3://cicd-demo-lambda-code-bucket-123/lambda/lambda_function.zip
-
-
       - echo "Updating Lambda function..."
-      aws lambda update-function-code --function-name cicd-demo-lambda --s3-bucket cicd-demo-lambda-code-bucket-123 --s3-key lambda/lambda_function.zip
+      - aws lambda update-function-code --function-name cicd-demo-lambda --s3-bucket cicd-demo-lambda-code-bucket-123 --s3-key lambda/lambda_function.zip
 
